@@ -1,0 +1,111 @@
+type: picture-elements
+elements:
+  - type: 'custom:text-element'
+    text: Installed
+    style:
+      top: 7%
+      left: 80px
+      font-weight: bold
+      color: red
+  - type: 'custom:text-element'
+    text: Latest
+    style:
+      top: 7%
+      left: 165px
+      font-weight: bold
+      color: lime
+  - type: state-label
+    entity: sensor.core_updates
+    attribute: installed_version
+    style:
+      top: 17%
+      left: 80px
+  - type: 'custom:text-element'
+    text: Core
+    style:
+      top: 17%
+      left: 25px
+      font-weight: bold
+      color: yellow
+  - type: state-label
+    entity: sensor.core_updates
+    attribute: latest_version
+    style:
+      top: 17%
+      left: 165px
+  - type: state-label
+    entity: sensor.os_updates
+    attribute: installed_version
+    style:
+      top: 27%
+      left: 80px
+  - type: 'custom:text-element'
+    text: OS
+    style:
+      top: 27%
+      left: 25px
+      font-weight: bold
+      color: yellow
+  - type: state-label
+    entity: sensor.os_updates
+    attribute: latest_version
+    style:
+      top: 27%
+      left: 165px
+  - type: state-label
+    entity: sensor.supervisor_updates
+    attribute: installed_version
+    style:
+      top: 37%
+      left: 80px
+  - type: 'custom:text-element'
+    text: Sup.
+    style:
+      top: 37%
+      left: 25px
+      font-weight: bold
+      color: yellow
+  - type: state-label
+    entity: sensor.supervisor_updates
+    attribute: latest_version
+    style:
+      top: 37%
+      left: 165px
+  - type: 'custom:text-element'
+    text: Add-on
+    style:
+      top: 52%
+      left: 25px
+      font-weight: bold
+      font-size: 11px
+      color: orange
+  - type: state-label
+    entity: sensor.addons_updates
+    style:
+      top: 52%
+      left: 115px
+  - type: 'custom:text-element'
+    text: HACS
+    style:
+      top: 62%
+      left: 25px
+      font-weight: bold
+      font-size: 11px
+      color: orange
+  - type: state-label
+    entity: sensor.hacs
+    style:
+      top: 62%
+      left: 114px
+  - type: state-label
+    entity: sensor.ha_uptime_mod
+    prefix: 'Uptime: '
+    style:
+      top: 77%
+      left: 115px
+  - type: state-label
+    entity: sensor.ha_start_time
+    style:
+      top: 87%
+      left: 115px
+image: 'https://frenck.dev/wp-content/uploads/2020/01/homeassistant-1920x1080.jpg'
