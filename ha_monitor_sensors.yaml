@@ -1,0 +1,84 @@
+################
+### Sensors  ###
+################
+      
+  - platform: command_line
+    name: OS Updates
+    command: 'curl http://supervisor/os/info -H "Authorization: Bearer $(printenv SUPERVISOR_TOKEN)" | jq ''{"latest_version":.data.version_latest,"installed_version":.data.version,"update_available":.data.update_available}'''
+    value_template: '{{ value_json.update_available }}'
+    scan_interval: 600
+    json_attributes:
+      - update_available
+      - latest_version
+      - installed_version
+      
+  - platform: command_line
+    name: Core Updates
+    command: 'curl http://supervisor/core/info -H "Authorization: Bearer $(printenv SUPERVISOR_TOKEN)" | jq ''{"latest_version":.data.version_latest,"installed_version":.data.version,"update_available":.data.update_available}'''
+    value_template: '{{ value_json.update_available }}'
+    scan_interval: 600
+    json_attributes:
+      - update_available
+      - latest_version
+      - installed_version
+      
+  - platform: command_line
+    name: Supervisor Updates
+    command: 'curl http://supervisor/supervisor/info -H "Authorization: Bearer $(printenv SUPERVISOR_TOKEN)" | jq ''{"latest_version":.data.version_latest,"installed_version":.data.version,"update_available":.data.update_available}'''
+    value_template: '{{ value_json.update_available }}'
+    scan_interval: 600
+    json_attributes:
+      - update_available
+      - latest_version
+      - installed_version
+      
+  - platform: command_line
+    name: Addons Updates
+    command: 'curl http://supervisor/addons -H "Authorization: Bearer $(printenv SUPERVISOR_TOKEN)" | jq ''{"addons":[.data.addons[] | select(.update_available)]}'''
+    value_template: '{{ value_json.addons | length }}'
+    unit_of_measurement: pending update(s)
+    scan_interval: 600
+    json_attributes:
+      - addons
+      
+  - platform: uptime
+    name: "HA Uptime"
+    
+  - platform: template
+    sensors:
+      ha_uptime_mod:
+        friendly_name: "Home Assistant uptime"
+        value_template: >-
+          {% set up_time =  as_timestamp(now()) - as_timestamp(states('sensor.ha_uptime')) %}
+
+          {% if up_time == 0 %}
+            Just restarted...
+          {% else %}
+            {% set minutes = (up_time // 60) | int %}
+            {% set hours = (minutes // 60) %}
+            {% set days = (hours // 24) %}
+            {% set weeks = (days // 7) %}
+
+            {% set minutes = (minutes % 60) %}
+            {% set hours =  (hours % 24) %}
+            {% set days = (days % 7) %}
+
+            {% macro phrase(value, name) %}
+                      {%- set value = value %}
+                      {%- set end = 's' if value > 1 else '' %}
+                      {{- '{} {}{}'.format(value, name, end) if value | int > 0 else '' }}
+            {%- endmacro %}
+
+            {% set text = [ phrase(weeks, 'week'), phrase(days, 'day'), phrase(hours, 'hr'), phrase(minutes, 'min') ] | select('!=','') | list | join(', ') %}
+            {% set last_comma = text.rfind(',') %}
+            {% if last_comma != -1 %}
+              {% set text = text[:last_comma] + ' and' + text[last_comma + 1:] %}
+            {% endif %}
+
+          {{ text }}
+
+          {% endif %}
+  
+  - platform: command_line
+    name: HA Start time
+    command: grep -m1 'Home Assistant initialized' home-assistant.log | awk '{ print $6, $7, $8, $9, $10 }'
