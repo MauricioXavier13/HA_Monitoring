@@ -1,0 +1,26 @@
+#you can just copy the clipboard to your automation ui or
+#if you want to use in packages just add
+#automation:
+
+#change the notify services by your own
+
+alias: Updates Available
+description: ''
+trigger:
+  - platform: state
+    entity_id:
+      - sensor.core_updates
+      - sensor.os_updates
+      - sensor.supervisor_updates
+    to: 'True'
+condition: []
+action:
+  - service: notify.mobile_app_oneplus_a5010
+    data:
+      title: '{{ trigger.to_state.attributes.friendly_name }}'
+      message: 'New Version: {{ trigger.to_state.attributes.latest_version }}'
+  - service: notify.homie_bot
+    data:
+      title: '{{ trigger.to_state.attributes.friendly_name }}'
+      message: 'New Version: {{ trigger.to_state.attributes.latest_version }}'
+mode: single
