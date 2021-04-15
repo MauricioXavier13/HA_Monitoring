@@ -1,8 +1,11 @@
-#You should include the following in Configuration.yaml to have the initialized sensor working
+#You should include the following (4 lines below) in Configuration.yaml to have the initialized sensor working
 #logger:
 #  default: warn
 #  logs:
 #    homeassistant.bootstrap: info 
+
+
+######Code to be copied to packages#####
 
 sensor:
 
